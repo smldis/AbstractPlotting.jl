@@ -533,16 +533,12 @@ const colorbrewer_names = Symbol[
     #Accent, Dark2, Pastel2, and Set2 only support 8 colors.
     #The available qualitative color schemes are:
     :Set1,
-    :Set2,
     :Set3,
-    :Dark2,
-    :Accent,
     :Paired,
     :Pastel1,
-    :Pastel2
 ]
 
-const colorbrewer_8color_names = String[
+const colorbrewer_8color_names = Symbol[
     #Accent, Dark2, Pastel2, and Set2 only support 8 colors, so put them in a special-case list.
     :Accent,
     :Dark2,
@@ -550,7 +546,7 @@ const colorbrewer_8color_names = String[
     :Set2
 ]
 
-const all_gradient_names = Set(vcat(string.(colorbrewer_names), "viridis"))
+const all_gradient_names = Set(vcat(string.(colorbrewer_names), string.(colorbrewer_8color_names), "viridis"))
 
 """
     available_gradients()
@@ -611,7 +607,7 @@ function convert_attribute(cs::Union{String, Symbol}, ::key"colormap", n::Intege
         ]
         return resample(cm, n)
     elseif cs_string in all_gradient_names
-        if cs_string in colorbrewer_8color_names
+        if cs_string in string.(colorbrewer_8color_names)
             return resample(ColorBrewer.palette(cs_string, 8), n)
         else
             return resample(ColorBrewer.palette(cs_string, 9), n)
