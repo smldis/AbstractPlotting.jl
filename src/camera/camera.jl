@@ -25,7 +25,7 @@ to make it easier to disconnect the camera steering signals later!
 """
 
 function Base.map(f, c::Camera, nodes::Node...)
-    node = map(f, nodes...)
+    node = lift(f, nodes...)
     push!(c.steering_nodes, node)
     node
 end
