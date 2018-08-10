@@ -196,14 +196,14 @@ Use the optional `extended = true` keyword argument to see more details.
 function print_rec(io::IO, dict, indent::Int = 1; extended = false)
     for (k, v) in dict
         print(io, " "^(indent*4), k)
-        if isa(Reactive.value(v), AbstractPlotting.Attributes)
+        if isa(to_value(v), AbstractPlotting.Attributes)
             print(": ")
             println(io)
             print_rec(io, v[], indent + 1; extended = extended)
-        elseif isa(v, Reactive.Signal)
+        elseif isa(v, Node)
             if extended
                 print(": ")
-                println(io, Reactive.value(v))
+                println(io, to_value(v))
             else
                 println(io)
             end

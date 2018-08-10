@@ -245,10 +245,12 @@ function Scene(;
     events = Events()
     theme = current_default_theme(; kw_args...)
     resolution = theme[:resolution][]
-    px_area = foldp(IRect(0, 0, resolution), events.window_area) do v0, w_area
+    v0 = IRect(0, 0, resolution)
+    px_area = lift(events.window_area) do w_area
         wh = widths(w_area)
         wh = (wh == Vec(0, 0)) ? widths(v0) : wh
-        IRect(0, 0, wh)
+        v0 = IRect(0, 0, wh)
+        v0
     end
     scene = Scene(
         events,
@@ -295,7 +297,7 @@ end
 
 function Scene(scene::Scene, area)
     events = scene.events
-    px_area = signal_convert(Signal{IRect2D}, area)
+    px_area = signal_convert(Node{IRect2D}, area)
     child = Scene(
         events,
         px_area,
@@ -336,10 +338,7 @@ function flatten_combined(plots::Vector, flat = AbstractPlot[])
 end
 
 
-
-
-
-function insertplots!(screen::Display, scene::Scene)
+function insertplots!(screen::AbstractDisplay, scene::Scene)
     for elem in scene.plots
         insert!(screen, scene, elem)
     end

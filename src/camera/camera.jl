@@ -32,9 +32,9 @@ end
 
 function Camera(px_area)
     Camera(
-        Node(eye(Mat4f0)),
-        Node(eye(Mat4f0)),
-        Node(eye(Mat4f0)),
+        Node(Mat4f0(I)),
+        Node(Mat4f0(I)),
+        Node(Mat4f0(I)),
         map(a-> Vec2f0(widths(a)), px_area),
         Node(Vec3f0(1)),
         Node[]

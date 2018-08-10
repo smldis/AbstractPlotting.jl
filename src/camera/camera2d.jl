@@ -9,7 +9,7 @@ end
 function cam2d!(scene::SceneLike; kw_args...)
     cam_attributes, rest = merged_get!(:cam2d, scene, Attributes(kw_args)) do
         Theme(
-            area = Signal(FRect(0, 0, 1, 1), name = "area"),
+            area = node(:area, FRect(0, 0, 1, 1)),
             zoomspeed = 0.10f0,
             zoombutton = nothing,
             panbutton = Mouse.right,
@@ -253,7 +253,7 @@ end
 
 struct PixelCamera <: AbstractCamera end
 function campixel!(scene)
-    camera(scene).view[] = eye(Mat4f0)
+    camera(scene).view[] = Mat4f0(I)
     map(camera(scene), pixelarea(scene)) do window_size
         nearclip = -10_000f0
         farclip = 10_000f0

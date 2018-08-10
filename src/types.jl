@@ -18,7 +18,7 @@ struct EmptyCamera <: AbstractCamera end
 
 const RealVector{T} = AbstractVector{T} where T <: Number
 
-const Node = Signal
+const Node = Observable
 
 const Rect{N, T} = HyperRectangle{N, T}
 const Rect2D{T} = HyperRectangle{2, T}
@@ -91,7 +91,7 @@ function FRect3D(x::Rect2D)
     FRect3D(Vec3f0(minimum(x)..., 0), Vec3f0(widths(x)..., 0.0))
 end
 # For now, we use Reactive.Signal as our Node type. This might change in the future
-const Node = Signal
+const Node = Observable
 
 include("interaction/iodevices.jl")
 
@@ -167,9 +167,8 @@ Attributes(pairs::Pair...) = Attributes(Dict{Symbol, Node}(node_pairs(pairs)))
 Attributes(pairs::AbstractVector) = Attributes(Dict{Symbol, Node}(node_pairs.(pairs)))
 Base.keys(x::Attributes) = keys(x.attributes)
 Base.values(x::Attributes) = values(x.attributes)
-Base.start(x::Attributes) = start(x.attributes)
-Base.next(x::Attributes, state) = next(x.attributes, state)
-Base.done(x::Attributes, state) = done(x.attributes, state)
+Base.iterate(x::Attributes) = iterate(x.attributes)
+Base.iterate(x::Attributes, state) = iterate(x.attributes, state)
 Base.copy(x::Attributes) = Attributes(copy(x.attributes))
 Base.merge(x::Attributes...) = Attributes(merge(map(a-> a.attributes, x)...))
 Base.merge!(x::Attributes...) = merge!(map(a-> a.attributes, x)...)
