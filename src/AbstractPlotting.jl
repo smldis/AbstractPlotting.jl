@@ -1,4 +1,3 @@
-__precompile__()
 module AbstractPlotting
 
 using Observables, GeometryTypes, StaticArrays, ColorTypes, Colors, IntervalSets
@@ -8,12 +7,12 @@ using ColorBrewer
 using Packing
 using SignedDistanceFields
 using FreeType, FreeTypeAbstraction, UnicodeFun
-using LinearAlgebra
+using LinearAlgebra, Statistics
+
 
 using Base: RefValue
 using Base.Iterators: repeated, drop
 import Base: getindex, setindex!, push!, append!, parent, get, get!, delete!, haskey
-
 
 include("utilities/quaternions.jl")
 include("types.jl")

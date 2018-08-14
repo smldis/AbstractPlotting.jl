@@ -1,18 +1,15 @@
 # TODO use 0.7 logging capabilities!
 using Printf
-using Base: RefValue
 # info, debug, gc, signals, performance
 const log_level = RefValue((false, false, false, false, false, false))
 
 function enable_ith(i, value::Bool)
-    log_level[] = ntuple(j-> j == i ? value : log_level[][j], Val{5})
+    log_level[] = ntuple(j-> j == i ? value : log_level[][j], Val(5))
     value
 end
 log_info(value::Bool = true) = enable_ith(1, value)
 
 const logging_io = RefValue(stdout)
-
-
 
 macro log_gc(args...)
     quote

@@ -45,11 +45,9 @@ mutable struct Scene <: AbstractScene
 end
 
 # Just indexing into a scene gets you plot 1, plot 2 etc
-Base.start(scene::Scene) = 1
-Base.done(scene::Scene, idx) = idx > length(scene)
-Base.next(scene::Scene, idx) = (scene[idx], idx + 1)
+Base.iterate(scene::Scene, idx = 1) = idx <= length(scene) ? (scene[idx], idx + 1) : nothing
 Base.length(scene::Scene) = length(scene.plots)
-Base.endof(scene::Scene) = length(scene.plots)
+Base.lastindex(scene::Scene) = length(scene.plots)
 getindex(scene::Scene, idx::Integer) = scene.plots[idx]
 GeometryTypes.widths(scene::Scene) = widths(to_value(pixelarea(scene)))
 struct Axis end
@@ -173,7 +171,7 @@ end
 
 const current_global_scene = Ref{Any}()
 
-if is_windows()
+if Sys.iswindows()
     function _primary_resolution()
         # ccall((:GetSystemMetricsForDpi, :user32), Cint, (Cint, Cuint), 0, ccall((:GetDpiForSystem, :user32), Cuint, ()))
         # ccall((:GetSystemMetrics, :user32), Cint, (Cint,), 17)
@@ -325,6 +323,9 @@ function plots_from_camera(scene::Scene, camera::Camera, list = AbstractPlot[])
     list
 end
 
+"""
+Flattens all the combined plots and returns a Vector of Atomic plots
+"""
 function flatten_combined(plots::Vector, flat = AbstractPlot[])
     for elem in plots
         if (elem isa Combined)
