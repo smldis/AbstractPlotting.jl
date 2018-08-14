@@ -285,7 +285,7 @@ function (PlotType::Type{<: AbstractPlot{Typ}})(scene::SceneLike, attributes::At
         args
     end
     # now get a signal node/signal for each argument
-    N = length(value(args_converted))
+    N = length(to_value(args_converted))
     names = argument_names(PlotType, N)
     node_args_seperated = ntuple(N) do i
         lift(args_converted, name = string(names[i])) do x
@@ -314,7 +314,7 @@ function (PlotType::Type{<: AbstractPlot{Typ}})(scene::SceneLike, attributes::At
     # The argument type of the final plot object is the assumened to stay constant after
     # argument conversion. This might not always hold, but it simplifies
     # things quite a bit
-    ArgTyp = typeof(value(args_converted))
+    ArgTyp = typeof(to_value(args_converted))
     # construct the fully qualified plot type, from the possible incomplete (abstract)
     # PlotType
     FinalType = basetype(PlotType){Typ, ArgTyp}

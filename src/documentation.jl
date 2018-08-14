@@ -112,7 +112,7 @@ function help_attributes(io::IO, Typ::Type{T}; extended = false) where T <: Abst
             if !(attribute in filter_keys)
                 padding = longest - length(string(attribute)) + extra_padding
                 print(io, "  ", attribute, " "^padding)
-                show(io, AbstractPlotting.value(value))
+                show(io, AbstractPlotting.to_value(value))
                 print(io, "\n")
             end
         end

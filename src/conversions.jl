@@ -1,7 +1,7 @@
 
 # a few shortcut functions to make attribute conversion easier
 @inline function get_attribute(dict, key)
-    convert_attribute(value(dict[key]), Key{key}())
+    convert_attribute(to_value(dict[key]), Key{key}())
 end
 
 """

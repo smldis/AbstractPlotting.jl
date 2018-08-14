@@ -54,7 +54,7 @@ getindex(scene::Scene, idx::Integer) = scene.plots[idx]
 GeometryTypes.widths(scene::Scene) = widths(to_value(pixelarea(scene)))
 struct Axis end
 
-child(scene::Scene) = Scene(scene, value(pixelarea(scene)))
+child(scene::Scene) = Scene(scene, to_value(pixelarea(scene)))
 
 """
 Creates a subscene with a pixel camera
@@ -112,7 +112,7 @@ theme(x::SceneLike, args...) = theme(x.parent, args...)
 theme(x::Scene) = x.theme
 theme(x::Scene, key) = x.theme[key]
 theme(x::AbstractPlot, key) = x.attributes[key]
-theme(::Void, key::Symbol) = current_default_theme()[key]
+theme(::Nothing, key::Symbol) = current_default_theme()[key]
 
 Base.push!(scene::Combined, subscene) = nothing # Combined plots add themselves uppon creation
 function Base.push!(scene::Scene, plot::AbstractPlot)
@@ -177,9 +177,9 @@ if is_windows()
     function _primary_resolution()
         # ccall((:GetSystemMetricsForDpi, :user32), Cint, (Cint, Cuint), 0, ccall((:GetDpiForSystem, :user32), Cuint, ()))
         # ccall((:GetSystemMetrics, :user32), Cint, (Cint,), 17)
-        dc = ccall((:GetDC, :user32), Ptr{Void}, (Ptr{Void},), C_NULL)
+        dc = ccall((:GetDC, :user32), Ptr{Cvoid}, (Ptr{Cvoid},), C_NULL)
         ntuple(2) do i
-            Int(ccall((:GetDeviceCaps, :gdi32), Cint, (Ptr{Void}, Cint), dc, (2 - i) + 117))
+            Int(ccall((:GetDeviceCaps, :gdi32), Cint, (Ptr{Cvoid}, Cint), dc, (2 - i) + 117))
         end
     end
 else
@@ -210,7 +210,7 @@ function current_scene()
     end
 end
 
-Scene(::Void) = Scene()
+Scene(::Nothing) = Scene()
 
 const minimal_default = Attributes(
     font = "Dejavu Sans",

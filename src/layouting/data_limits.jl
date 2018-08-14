@@ -10,11 +10,11 @@ end
 Data limits calculate a minimal boundingbox from the data points in a plot.
 This doesn't include any transformations, markers etc.
 """
-data_limits(x::Atomic{Typ, <: Tuple{Arg1}}) where {Typ, Arg1} = FRect3D(value(x[1]))
+data_limits(x::Atomic{Typ, <: Tuple{Arg1}}) where {Typ, Arg1} = FRect3D(to_value(x[1]))
 # TODO makes this generically work
-data_limits(x::Atomic{Typ, <: Tuple{<: AbstractVector{<: NTuple{N, <: Number}}}}) where {Typ, N} = FRect3D(Point{N, Float32}.(value(x[1])))
+data_limits(x::Atomic{Typ, <: Tuple{<: AbstractVector{<: NTuple{N, <: Number}}}}) where {Typ, N} = FRect3D(Point{N, Float32}.(to_value(x[1])))
 function data_limits(x::Atomic{Typ, <: Tuple{<: AbstractVector{<: NTuple{2, T}}}}) where {Typ, T <: VecTypes}
-    FRect3D(reinterpret(T, value(x[1])))
+    FRect3D(reinterpret(T, to_value(x[1])))
 end
 
 function data_limits(x::Atomic{Typ, <: Tuple{X, Y, Z}}) where {Typ, X, Y, Z}
@@ -78,7 +78,7 @@ function text_limits(x::AbstractVector)
     FRect3D(x)
 end
 function data_limits(x::Text)
-    text_limits(value(x[:position]))
+    text_limits(to_value(x[:position]))
 end
 
 function data_limits(x::Annotations)
@@ -86,7 +86,7 @@ function data_limits(x::Annotations)
     # for the annotation, we use the model matrix directly, so we need to
     # to inverse that transformation for the correct limits
     bb = data_limits(x.plots[1])
-    inv(value(x[:model])) * bb
+    inv(to_value(x[:model])) * bb
 end
 
 Base.isfinite(x::Rect) = all(isfinite.(minimum(x))) &&  all(isfinite.(maximum(x)))

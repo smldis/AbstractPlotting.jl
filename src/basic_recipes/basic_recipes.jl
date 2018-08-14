@@ -168,7 +168,7 @@ Theme(x::AbstractPlot) = x.attributes
 #         decompose(Point3f0, g) # get the point representation of the geometry
 #     end
 #     # Get line index representation
-#     indices = decompose(Face{2, GLIndex}, value(geometry))
+#     indices = decompose(Face{2, GLIndex}, to_value(geometry))
 #     data[:indices] = reinterpret(GLuint, indices)
 #     _default(points, style"linesegment"(), data)
 # end
@@ -277,7 +277,7 @@ function plot!(plot::Annotations)
         plot[1], position,
         getindex.(plot, (:color, :textsize, :align, :rotation))...,
     )
-    N = value(position) |> eltype |> length
+    N = to_value(position) |> eltype |> length
     tp = lift(sargs...) do model, font, args...
         if length(args[1]) != length(args[2])
             error("For each text annotation, there needs to be one position. Found: $(length(t)) strings and $(length(p)) positions")
@@ -405,7 +405,7 @@ function plot!(scene::SceneLike, subscene::AbstractPlot, attributes::Attributes)
         end
     end
     push!(scene.plots, subscene)
-    value(plot_attributes[:center]) && center!(scene)
+    to_value(plot_attributes[:center]) && center!(scene)
     scene
 end
 
