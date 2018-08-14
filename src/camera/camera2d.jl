@@ -63,9 +63,9 @@ function update_cam!(scene::SceneLike, cam::Camera2D)
     # so we don't push! and just update the value in place
     view = translationmatrix(Vec3f0(-x - w, -y - h, 0))
     projection = orthographicprojection(-w, w, -h, h, -10_000f0, 10_000f0)
-    push!(camera(scene).view, view)
-    push!(camera(scene).projection, projection)
-    push!(camera(scene).projectionview, projection * view)
+    camera(scene).view[] = view
+    camera(scene).projection[] = projection
+    camera(scene).projectionview[] = projection * view
     return
 end
 
@@ -259,8 +259,8 @@ function campixel!(scene)
         farclip = 10_000f0
         w, h = Float32.(widths(window_size))
         projection = orthographicprojection(0f0, w, 0f0, h, nearclip, farclip)
-        push!(camera(scene).projection, projection)
-        push!(camera(scene).projectionview, projection)
+        camera(scene).projection[] = projection
+        camera(scene).projectionview[] = projection
     end
     cam = PixelCamera()
     cameracontrols(scene) = cam

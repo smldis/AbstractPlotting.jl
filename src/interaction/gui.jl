@@ -38,7 +38,7 @@ function plot!(slider::Slider)
     ))
     range = slider[1]
     val = slider[:value]
-    push!(val, first(to_value(range)))
+    val[] = first(to_value(range))
     label = lift((v, f)-> f(v), val, valueprinter)
     lplot = text!(
         slider, label,

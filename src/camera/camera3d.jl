@@ -185,10 +185,10 @@ function update_cam!(scene::Scene, cam::Camera3D)
     proj = projection_switch(scene.px_area[], fov, near, far, projectiontype, zoom)
     view = AbstractPlotting.lookat(eyeposition, lookat, upvector)
 
-    push!(scene.camera.projection, proj)
-    push!(scene.camera.view, view)
-    push!(scene.camera.projectionview, proj * view)
-    push!(scene.camera.eyeposition, cam.eyeposition[])
+    scene.camera.projection[] = proj
+    scene.camera.view[] = view
+    scene.camera.projectionview[] = proj * view
+    scene.camera.eyeposition[] = cam.eyeposition[]
 end
 
 function update_cam!(scene::Scene, camera::Camera3D, area3d::Rect)
