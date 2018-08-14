@@ -179,9 +179,7 @@ function vbox(plots::Vector{T}; kw_args...) where T <: Scene
         push!(pscene.children, p)
         nodes = map(fieldnames(Events)) do field
             if field != :window_area
-                foreach(getfield(pscene.events, field)) do val
-                    push!(getfield(p.events, field), val)
-                end
+                connect!(getfield(pscene.events, field), getfield(p.events, field))
             end
         end
     end

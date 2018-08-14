@@ -88,7 +88,7 @@ end
 function add_pan!(scene::SceneLike, cam::Camera2D)
     startpos = RefValue((0.0, 0.0))
     e = events(scene)
-    map(
+    lift(
         camera(scene),
         Node.((scene, cam, startpos))...,
         e.mousedrag
@@ -114,7 +114,7 @@ end
 
 function add_zoom!(scene::SceneLike, cam::Camera2D)
     e = events(scene)
-    map(camera(scene), e.scroll) do x
+    lift(camera(scene), e.scroll) do x
         @extractvalue cam (zoomspeed, zoombutton, area)
         zoom = Float32(x[2])
         if zoom != 0 && ispressed(scene, zoombutton) && is_mouseinside(scene)
@@ -160,7 +160,7 @@ function selection_rect!(scene, cam, key)
         raw = true
     ).plots[end]
     waspressed = RefValue(false)
-    dragged_rect = map(camera(scene), events(scene).mousedrag, key) do drag, key
+    dragged_rect = lift(camera(scene), events(scene).mousedrag, key) do drag, key
         if ispressed(scene, key) && is_mouseinside(scene)
             mp = events(scene).mouseposition[]
             mp = camspace(scene, cam, mp)
@@ -254,7 +254,7 @@ end
 struct PixelCamera <: AbstractCamera end
 function campixel!(scene)
     camera(scene).view[] = Mat4f0(I)
-    map(camera(scene), pixelarea(scene)) do window_size
+    lift(camera(scene), pixelarea(scene)) do window_size
         nearclip = -10_000f0
         farclip = 10_000f0
         w, h = Float32.(widths(window_size))

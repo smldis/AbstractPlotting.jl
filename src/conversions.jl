@@ -754,9 +754,7 @@ Vector of anything that is accepted as a single marker will give each point it's
 Note that it needs to be a uniform vector with the same element type!
 """
 function to_spritemarker(marker::AbstractVector)
-    marker = map(marker) do sym
-        to_spritemarker(sym)
-    end
+    marker = to_spritemarker.(marker)
     if isa(marker, AbstractVector{Char})
         String(marker)
     else

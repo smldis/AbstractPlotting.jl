@@ -133,13 +133,12 @@ function connect!(scene::Scene, child::Scene)
 
 end
 
+
 function Base.push!(scene::Scene, child::Scene)
     push!(scene.children, child)
     disconnect!(child.camera)
     nodes = map([:view, :projection, :projectionview, :resolution, :eyeposition]) do field
-        lift(getfield(scene.camera, field)) do val
-            push!(getfield(child.camera, field), val)
-        end
+        connect!(getfield(scene.camera, field), getfield(child.camera, field))
     end
     cameracontrols!(child, nodes)
 end

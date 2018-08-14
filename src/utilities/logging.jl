@@ -1,5 +1,6 @@
 # TODO use 0.7 logging capabilities!
 using Printf
+using Base: RefValue
 # info, debug, gc, signals, performance
 const log_level = RefValue((false, false, false, false, false, false))
 
@@ -9,21 +10,9 @@ function enable_ith(i, value::Bool)
 end
 log_info(value::Bool = true) = enable_ith(1, value)
 
-const logging_io = RefValue(STDOUT)
-macro info(args...)
-    quote
-        if log_level[][1]
-            print_with_color(:light_green, STDOUT, $(esc.(args)...), "\n")
-        end
-    end
-end
-macro debug(args...)
-    quote
-        if log_level[][2]
-            print_with_color(:red, logging_io[], $(esc.(args)...))
-        end
-    end
-end
+const logging_io = RefValue(stdout)
+
+
 
 macro log_gc(args...)
     quote
@@ -40,13 +29,6 @@ macro log_signals(args...)
     end
 end
 
-macro warn(args...)
-    quote
-        if log_level[][5]
-            print_with_color(:red, logging_io[], $(esc.(args)...))
-        end
-    end
-end
 
 function print_stats(io::IO, elapsedtime, bytes, gctime, allocs)
     @printf(io, "%10.6f seconds", elapsedtime/1e9)

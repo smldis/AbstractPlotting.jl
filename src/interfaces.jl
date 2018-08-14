@@ -278,7 +278,7 @@ function (PlotType::Type{<: AbstractPlot{Typ}})(scene::SceneLike, attributes::At
     # make sure all arguments are a node
     # with a sensible name
     arg_nodes = node.(ntuple(i-> Symbol("input $i"), length(args)), args)
-    args_converted = map(arg_nodes...) do args...
+    args_converted = lift(arg_nodes...) do args...
         # do the argument conversion inside a lift
         args = convert_arguments(PlotType, args...)
         PlotType2 = plottype(args...)
@@ -288,7 +288,7 @@ function (PlotType::Type{<: AbstractPlot{Typ}})(scene::SceneLike, attributes::At
     N = length(value(args_converted))
     names = argument_names(PlotType, N)
     node_args_seperated = ntuple(N) do i
-        map(args_converted, name = string(names[i])) do x
+        lift(args_converted, name = string(names[i])) do x
             if i <= length(x)
                 x[i]
             else

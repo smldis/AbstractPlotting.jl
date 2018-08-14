@@ -1,10 +1,17 @@
 
 # I don't want to use map anymore, it's so ambigious, especially to newcomers.
 # TODO should this become it's own function?
-const lift = Observables.map
+function lift(
+        f, o1::Observable, rest...;
+        init = f(to_value(o1), to_value.(rest)...), typ = typeof(init),
+        name = :node # name ignored for now
+    )
+    result = Observable{typ}(init)
+    map!(f, result, o1, rest...)
+end
 
-to_value(x) = Observables._val(x)
-to_value(x::Void) = x
+to_value(x::Observable) = x[]
+to_value(x) = x
 
 to_node(::Type{T1}, x::Node{T2}, name = :node) where {T1, T2} = signal_convert(Node{T1}, x, name)
 to_node(x::T, name = :node) where T = to_node(T, x)
@@ -12,7 +19,7 @@ to_node(::Type{T}, x, name = :node) where T = to_node(T, Node{T}(x))
 
 signal_convert(::Type{Node{T1}}, x::Node{T1}, name = :node) where T1 = x
 signal_convert(::Type{Node{T1}}, x::Node{T2}, name = :node) where {T1, T2} = lift(x-> convert(T1, x), x, typ = T1)
-signal_convert(::Type{Node{T1}}, x::T2, name = :node) where {T1, T2} = Node(T1, convert(T1, x))
+signal_convert(::Type{Node{T1}}, x::T2, name = :node) where {T1, T2} = Node{T1}(convert(T1, x))
 signal_convert(t, x, name = :node) = x
 
 node(name, node) = Node(node)
@@ -50,12 +57,12 @@ test(Node(1), Node(2))
 
 """
 function map_once(
-        f, input::Node, inputsrest::Node...;
-        init = f(map(value, (input,inputsrest...))...),
+        f, input::Node, inputrest::Node...;
+        init = f(to_value.((input, inputrest...))...),
         typ = typeof(init)
     )
-    off.(f, (input, inputrest...))
-    map(f, input, inputsrest...)
+    off.((input, inputrest...), f, raise = false)
+    lift(f, input, inputrest..., init = init, typ = typ)
 end
 
 #

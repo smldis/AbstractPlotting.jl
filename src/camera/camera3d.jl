@@ -40,7 +40,7 @@ function cam3d!(scene; kw_args...)
     add_translation!(scene, camera, camera.pan_button, camera.move_key)
     add_rotation!(scene, camera, camera.rotate_button, camera.move_key)
     cameracontrols!(scene, camera)
-    map(scene.camera, scene.px_area) do area
+    lift(scene.camera, scene.px_area) do area
         # update cam when screen ratio changes
         update_cam!(scene, camera)
     end
@@ -85,7 +85,7 @@ is_mouseinside(scene) = Vec(scene.events.mouseposition[]) in pixelarea(scene)[]
 
 function add_translation!(scene, cam, key, button)
     last_mousepos = RefValue(Vec2f0(0, 0))
-    map(scene.camera, scene.events.mousedrag) do drag
+    lift(camera(scene), scene.events.mousedrag) do drag
         mp = Vec2f0(scene.events.mouseposition[])
         if ispressed(scene, key[]) && ispressed(scene, button[]) && is_mouseinside(scene)
             if drag == Mouse.down
@@ -100,7 +100,7 @@ function add_translation!(scene, cam, key, button)
         end
         return
     end
-    map(scene.camera, scene.events.scroll) do scroll
+    lift(camera(scene), scene.events.scroll) do scroll
         if ispressed(scene, button[]) && is_mouseinside(scene)
             translate_cam!(scene, cam, Vec3f0(scroll[2], 0f0, 0f0))
         end
@@ -110,7 +110,7 @@ end
 
 function add_rotation!(scene, cam, button, key)
     last_mousepos = RefValue(Vec2f0(0, 0))
-    map(scene.camera, scene.events.mousedrag) do drag
+    lift(camera(scene), scene.events.mousedrag) do drag
         if ispressed(scene, button[]) && ispressed(scene, key[]) && is_mouseinside(scene)
             if drag == Mouse.down
                 last_mousepos[] = Vec2f0(scene.events.mouseposition[])

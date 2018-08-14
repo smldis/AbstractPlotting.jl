@@ -92,7 +92,7 @@ end
 
 # TODO this is a bit shady, but maybe a nice api!
 # So you can use void whenever you don't care what is pressed
-ispressed(scene::SceneLike, ::Void) = true
+ispressed(scene::SceneLike, ::Nothing) = true
 
 function ispressed(buttons::Set{T}, button) where T <: Union{Keyboard.Button, Mouse.Button}
     if isa(button, Set)

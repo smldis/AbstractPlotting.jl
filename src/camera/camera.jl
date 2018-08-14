@@ -24,7 +24,7 @@ When mapping over nodes for the camera, we store them in the steering_node vecto
 to make it easier to disconnect the camera steering signals later!
 """
 
-function Base.map(f, c::Camera, nodes::Node...)
+function lift(f, c::Camera, nodes::Node...)
     node = lift(f, nodes...)
     push!(c.steering_nodes, node)
     node
@@ -35,7 +35,7 @@ function Camera(px_area)
         Node(Mat4f0(I)),
         Node(Mat4f0(I)),
         Node(Mat4f0(I)),
-        map(a-> Vec2f0(widths(a)), px_area),
+        lift(a-> Vec2f0(widths(a)), px_area),
         Node(Vec3f0(1)),
         Node[]
     )

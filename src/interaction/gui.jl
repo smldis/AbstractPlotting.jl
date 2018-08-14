@@ -21,7 +21,7 @@ end
 
 mouseover() = error("not implemented")
 export mouseover
-convert_arguments(::Type{<: Slider}, x::Range) = (x,)
+convert_arguments(::Type{<: Slider}, x::AbstractRange) = (x,)
 
 function range_label_bb(tplot, printer_func, range)
     bb = boundingbox(tplot, printer_func(first(range)))
@@ -44,7 +44,7 @@ function plot!(slider::Slider)
         slider, label,
         textsize = textsize,
         align = (:left, :center), color = textcolor,
-        position = map((w, h)-> Point2f0(w, h/2), sliderlength, sliderheight)
+        position = lift((w, h)-> Point2f0(w, h/2), sliderlength, sliderheight)
     ).plots[end]
     lbb = lift(range_label_bb, Node(lplot), valueprinter, range)
     bg_rect = lift(sliderlength, sliderheight, lbb) do w, h, bb
@@ -61,7 +61,7 @@ function plot!(slider::Slider)
 
     linesegments!(slider, line, color = slidercolor)
     button = scatter!(
-        slider, map(x-> x[1:1], line),
+        slider, lift(x-> x[1:1], line),
         markersize = buttonsize, color = buttoncolor, strokewidth = buttonstroke,
         strokecolor = buttonstrokecolor
     ).plots[end]
@@ -135,7 +135,7 @@ function plot!(splot::Button)
         splot, txt,
         align = (:center, :center), color = textcolor,
         textsize = 15,
-        position = map((wh)-> Point2f0(wh./2), dimensions)
+        position = lift((wh)-> Point2f0(wh./2), dimensions)
     ).plots[end]
     lbb = boundingbox(lplot) # on purpose static so we hope text won't become too long?
     # bg_rect = lift(dimensions) do wh
