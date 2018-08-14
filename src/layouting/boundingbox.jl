@@ -27,7 +27,7 @@ end
 
 
 function boundingbox(x::Text, text::String)
-    position = to_to_value(x[:position])
+    position = to_value(x[:position])
     @get_attribute x (textsize, font, align, rotation, model)
     boundingbox(text, position, textsize, font, align, rotation, model)
 end

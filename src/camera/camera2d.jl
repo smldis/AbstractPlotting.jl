@@ -71,7 +71,7 @@ end
 
 function correct_ratio!(scene, cam)
     lastw = RefValue(widths(pixelarea(scene)[]))
-    map(camera(scene), pixelarea(scene)) do area
+    lift(camera(scene), pixelarea(scene)) do area
         neww = widths(area)
         change = neww .- lastw[]
         if !(change ≈ Vec(0.0, 0.0))

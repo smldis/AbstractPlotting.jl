@@ -358,7 +358,7 @@ function draw_axis(
     )
     start!(textbuffer); start!(linebuffer)
 
-    limit_widths = lift(x-> x[2] - x[1], limits)
+    limit_widths = map(x-> x[2] - x[1], limits)
     % = mean(limit_widths) / 100 # percentage
 
     xyticks = zip.(xyrange, labels)
