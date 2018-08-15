@@ -29,15 +29,15 @@ mutable struct Scene <: AbstractScene
         obj = new(events, px_area, camera, camera_controls, limits, transformation, plots, theme, children, current_screens)
         finalizer(obj) do obj
             # save_print("Freeing scene")
-            close_all_nodes(obj.events)
-            close_all_nodes(obj.transformation)
-            for field in (:px_area, :limits)
-                close(getfield(obj, field), true)
-            end
-            disconnect!(obj.camera)
-            empty!(obj.theme)
-            empty!(obj.children)
-            empty!(obj.current_screens)
+            # close_all_nodes(obj.events)
+            # close_all_nodes(obj.transformation)
+            # for field in (:px_area, :limits)
+            #     close(getfield(obj, field), true)
+            # end
+            # disconnect!(obj.camera)
+            # empty!(obj.theme)
+            # empty!(obj.children)
+            # empty!(obj.current_screens)
             return
         end
         obj

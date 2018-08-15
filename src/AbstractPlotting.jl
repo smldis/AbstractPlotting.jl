@@ -65,7 +65,7 @@ export AbstractPlot, Combined, Atomic, Axis
 export Attributes, Theme, attributes, default_theme, theme
 
 # Node/Signal related
-export Node, node, lift, map_once
+export Node, node, lift, map_once, to_value
 
 # utilities and macros
 export @recipe, @extract, @extractvalue, @key_str, @get_attribute
