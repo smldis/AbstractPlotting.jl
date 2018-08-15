@@ -170,7 +170,7 @@ function vbox(plots::Vector{T}; kw_args...) where T <: Scene
 
     for idx in 1:N
         p = plots[idx]
-        foreach(area) do a
+        on(area) do a
             # TODO this is terrible!
             w2 = widths(a) .* Vec((1/N), 1)
             resize!(p, IRect(minimum(a) .+ Vec((idx - 1) * w2[1], 0), w2))
