@@ -1,3 +1,3 @@
-- translation speed depends on window size
+- translation speed should depend on window dpi
 - zoom is affected by z-clipping (transition to FOV?)
 - implement zoom to mouse position
